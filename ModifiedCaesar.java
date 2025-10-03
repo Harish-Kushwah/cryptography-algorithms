@@ -1,13 +1,12 @@
-import java.util.Scanner;
-
-public class CaesarCipher {
+public class ModifiedCaesar {
     public static String encrypt(String text, int shift) {
         StringBuilder result = new StringBuilder();
-        shift = shift % 26;
+        int count = 0;
         for (char c : text.toCharArray()) {
             if (Character.isLetter(c)) {
                 char base = Character.isLowerCase(c) ? 'a' : 'A';
-                result.append((char) ((c - base + shift) % 26 + base));
+                result.append((char) ((c - base + shift + count) % 26 + base));
+                count++;
             } else {
                 result.append(c);
             }
@@ -16,15 +15,23 @@ public class CaesarCipher {
     }
 
     public static String decrypt(String text, int shift) {
-        return encrypt(text, 26 - (shift % 26));
+        StringBuilder result = new StringBuilder();
+        int count = 0;
+        for (char c : text.toCharArray()) {
+            if (Character.isLetter(c)) {
+                char base = Character.isLowerCase(c) ? 'a' : 'A';
+                result.append((char) ((c - base - shift - count + 26 * 10) % 26 + base));
+                count++;
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter text: ");
-        String text = sc.nextLine();
-        System.out.print("Enter shift: ");
-        int shift = sc.nextInt();
+        String text = "HELLO";
+        int shift = 3;
 
         String encrypted = encrypt(text, shift);
         String decrypted = decrypt(encrypted, shift);
